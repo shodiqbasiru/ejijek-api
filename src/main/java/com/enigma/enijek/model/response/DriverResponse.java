@@ -15,5 +15,5 @@ public class DriverResponse {
     private String driverName;
     private String licensePlate;
     private String phoneNumber;
-    private BrandMotorcycles motorcycles;
+    private BrandResponse motorcycles;
 }

@@ -16,5 +16,5 @@ public class BrandResponse {
     private Integer id;
     private String brandName;
     private String modelName;
-    private List<Driver> driverList;
+    private List<DriverResponse> driverList;
 }

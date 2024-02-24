@@ -50,8 +50,14 @@ public class DriverController {
             path = "/api/drivers",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+//    public ResponseEntity<WebResponse<List<Driver>>> getAllDrivers() {
+//        List<Driver> responseDrivers = driverService.getAllDrivers();
+//        return new ResponseEntity<>(WebResponse.<List<Driver>>builder().data(responseDrivers).build(), HttpStatus.OK);
+//    }
+
     public ResponseEntity<WebResponse<List<DriverResponse>>> getAllDrivers() {
         List<DriverResponse> driverResponse = driverService.getAllDrivers();
+
         return new ResponseEntity<>(WebResponse.<List<DriverResponse>>builder().data(driverResponse).build(),HttpStatus.OK);
     }
 
@@ -61,8 +67,8 @@ public class DriverController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WebResponse<String>> update(@RequestBody DriverRequest request, @PathVariable String driverId){
-        driverService.update(request,driverId);
+    public ResponseEntity<WebResponse<String>> update(@RequestBody DriverRequest request, @PathVariable String driverId) {
+        driverService.update(request, driverId);
         WebResponse<String> webResponse = WebResponse.<String>builder().data("Updated Data Successfully").build();
         return ResponseEntity.status(HttpStatus.OK).body(webResponse);
     }
@@ -71,7 +77,7 @@ public class DriverController {
     @DeleteMapping(
             path = "/api/drivers/{driverId}"
     )
-    public ResponseEntity<WebResponse<String>> delete(@PathVariable String driverId){
+    public ResponseEntity<WebResponse<String>> delete(@PathVariable String driverId) {
         driverService.delete(driverId);
         WebResponse<String> webResponse = WebResponse.<String>builder().data("Deleted Data Successfully").build();
         return ResponseEntity.status(HttpStatus.OK).body(webResponse);

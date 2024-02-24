@@ -44,9 +44,10 @@ public class DriverServiceImpl implements DriverService {
                 .driverName(driver.getDriverName())
                 .licensePlate(driver.getLicensePlate())
                 .phoneNumber(driver.getPhoneNumber())
-                .motorcycles(driver.getBrandMotorcycles())
+                .motorcycles(mapBrandMotorcycles(driver.getBrandMotorcycles()))
                 .build();
     }
+
 
     @Override
     public List<DriverResponse> getAllDrivers() {
@@ -58,11 +59,21 @@ public class DriverServiceImpl implements DriverService {
                         .driverName(driver.getDriverName())
                         .licensePlate(driver.getLicensePlate())
                         .phoneNumber(driver.getPhoneNumber())
-                        .motorcycles(driver.getBrandMotorcycles())
+                        .motorcycles(mapBrandMotorcycles(driver.getBrandMotorcycles()))
                         .build())
                 .collect(Collectors.toList());
     }
 
+    private BrandResponse mapBrandMotorcycles(BrandMotorcycles brandMotorcycles) {
+        if (brandMotorcycles == null) {
+            return null;
+        }
+        return BrandResponse.builder()
+                .id(brandMotorcycles.getId())
+                .brandName(brandMotorcycles.getBrandName())
+                .modelName(brandMotorcycles.getModelName())
+                .build();
+    }
 
     @Override
     @Transactional
