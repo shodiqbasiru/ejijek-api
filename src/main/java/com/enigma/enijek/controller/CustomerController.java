@@ -3,6 +3,7 @@ package com.enigma.enijek.controller;
 import com.enigma.enijek.model.request.CustomerRequest;
 import com.enigma.enijek.model.response.CustomerResponse;
 import com.enigma.enijek.model.response.WebResponse;
+import com.enigma.enijek.routes.RouteApi;
 import com.enigma.enijek.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class CustomerController {
 
     // Add data
     @PostMapping(
-            path = "/api/customers",
+            path = RouteApi.POST_CUSTOMER,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -34,7 +35,7 @@ public class CustomerController {
 
     // find By id
     @GetMapping(
-            path = "/api/customers/{customerId}",
+            path = RouteApi.GET_CUSTOMER,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public WebResponse<CustomerResponse> get(@PathVariable String customerId) {
@@ -42,10 +43,9 @@ public class CustomerController {
         return WebResponse.<CustomerResponse>builder().data(customerResponse).build();
     }
 
-
     // get All data
     @GetMapping(
-            path = "/api/customers",
+            path = RouteApi.GET_CUSTOMERS,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<WebResponse<List<CustomerResponse>>> getAllCustomers() {
@@ -56,7 +56,7 @@ public class CustomerController {
 
     // update data
     @PutMapping(
-            path = "/api/customers/{customerId}",
+            path = RouteApi.PUT_CUSTOMER,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -69,7 +69,7 @@ public class CustomerController {
 
     // delete data
     @DeleteMapping(
-            path = "/api/customers/{customerId}"
+            path = RouteApi.DELETE_CUSTOMER
     )
     public ResponseEntity<WebResponse<String>> delete(@PathVariable String customerId){
         customerService.delete(customerId);

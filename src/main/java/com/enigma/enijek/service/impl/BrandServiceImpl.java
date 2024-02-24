@@ -7,10 +7,13 @@ import com.enigma.enijek.model.response.BrandInfoResponse;
 import com.enigma.enijek.reppsitory.BrandRepository;
 import com.enigma.enijek.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class BrandServiceImpl implements BrandService {
@@ -22,13 +25,34 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @Transactional
     public void create(BrandRequest request) {
+        BrandMotorcycles brandMotorcycles = new BrandMotorcycles();
+        brandMotorcycles.setBrandName(request.getBrandName());
+        brandMotorcycles.setModelName(request.getModelName());
 
+        brandRepository.save(brandMotorcycles);
     }
 
     @Override
     public BrandResponse get(String brandId) {
-        return null;
+        BrandMotorcycles response = brandRepository.findById(brandId).orElseThrow(() -> new RuntimeException(HttpStatus.UNAUTHORIZED + "Id Not Found"));
+        return BrandResponse.builder()
+                .id(response.getId())
+                .brandName(response.getBrandName())
+                .modelName(response.getBrandName())
+                .driverList(getInfoDriver(response).collect(Collectors.toList()))
+                .build();
+    }
+
+    private Stream<BrandInfoResponse> getInfoDriver(BrandMotorcycles response) {
+        return response.getDrivers().stream()
+                .map(driver -> BrandInfoResponse.builder()
+                        .id(driver.getId())
+                        .driverName(driver.getDriverName())
+                        .licensePlate(driver.getLicensePlate())
+                        .phoneNumber(driver.getPhoneNumber())
+                        .build());
     }
 
     @Override
@@ -39,26 +63,28 @@ public class BrandServiceImpl implements BrandService {
                         .id(brand.getId())
                         .brandName(brand.getBrandName())
                         .modelName(brand.getModelName())
-                        .driverList(brand.getDrivers()
-                                .stream().map(driver -> BrandInfoResponse.builder()
-                                        .id(driver.getId())
-                                        .driverName(driver.getDriverName())
-                                        .licensePlate(driver.getLicensePlate())
-                                        .phoneNumber(driver.getPhoneNumber())
-                                        .build())
-                                .collect(Collectors.toList())
-                        )
+                        .driverList(getInfoDriver(brand).collect(Collectors.toList()))
                         .build())
                 .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public void update(BrandRequest request, String brandId) {
+        BrandMotorcycles brandMotorcycles = brandRepository.findById(brandId).orElseThrow(() ->new RuntimeException(HttpStatus.UNAUTHORIZED+" ID Not Found"));
 
+        brandMotorcycles.setBrandName(request.getBrandName());
+        brandMotorcycles.setModelName(request.getModelName());
+
+        brandRepository.save(brandMotorcycles);
     }
 
     @Override
+    @Transactional
     public void delete(String brandId) {
-
+        BrandMotorcycles brandMotorcycles = brandRepository.findById(brandId).orElseThrow(() -> new RuntimeException(HttpStatus.UNAUTHORIZED + " Id Not Found"));
+        brandRepository.delete(brandMotorcycles);
     }
+
+
 }
