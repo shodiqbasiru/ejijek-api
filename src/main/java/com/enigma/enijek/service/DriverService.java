@@ -1,6 +1,5 @@
 package com.enigma.enijek.service;
 
-import com.enigma.enijek.entity.Driver;
 import com.enigma.enijek.model.request.DriverRequest;
 import com.enigma.enijek.model.response.DriverResponse;
 

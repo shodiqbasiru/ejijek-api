@@ -1,6 +1,5 @@
 package com.enigma.enijek.controller;
 
-import com.enigma.enijek.entity.Driver;
 import com.enigma.enijek.model.request.DriverRequest;
 import com.enigma.enijek.model.response.DriverResponse;
 import com.enigma.enijek.model.response.WebResponse;
@@ -50,11 +49,6 @@ public class DriverController {
             path = "/api/drivers",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-//    public ResponseEntity<WebResponse<List<Driver>>> getAllDrivers() {
-//        List<Driver> responseDrivers = driverService.getAllDrivers();
-//        return new ResponseEntity<>(WebResponse.<List<Driver>>builder().data(responseDrivers).build(), HttpStatus.OK);
-//    }
-
     public ResponseEntity<WebResponse<List<DriverResponse>>> getAllDrivers() {
         List<DriverResponse> driverResponse = driverService.getAllDrivers();
 

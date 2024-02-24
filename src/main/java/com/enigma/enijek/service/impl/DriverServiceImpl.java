@@ -4,6 +4,7 @@ import com.enigma.enijek.entity.BrandMotorcycles;
 import com.enigma.enijek.entity.Driver;
 import com.enigma.enijek.model.request.DriverRequest;
 import com.enigma.enijek.model.response.BrandResponse;
+import com.enigma.enijek.model.response.DriverInfoResponse;
 import com.enigma.enijek.model.response.DriverResponse;
 import com.enigma.enijek.reppsitory.DriverRepository;
 import com.enigma.enijek.service.DriverService;
@@ -64,11 +65,11 @@ public class DriverServiceImpl implements DriverService {
                 .collect(Collectors.toList());
     }
 
-    private BrandResponse mapBrandMotorcycles(BrandMotorcycles brandMotorcycles) {
+    private DriverInfoResponse mapBrandMotorcycles(BrandMotorcycles brandMotorcycles) {
         if (brandMotorcycles == null) {
             return null;
         }
-        return BrandResponse.builder()
+        return DriverInfoResponse.builder()
                 .id(brandMotorcycles.getId())
                 .brandName(brandMotorcycles.getBrandName())
                 .modelName(brandMotorcycles.getModelName())

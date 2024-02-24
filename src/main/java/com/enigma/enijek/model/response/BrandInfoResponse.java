@@ -5,15 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BrandResponse {
+public class BrandInfoResponse {
     private Integer id;
-    private String brandName;
-    private String modelName;
-    private List<BrandInfoResponse> driverList;
+    private String driverName;
+    private String licensePlate;
+    private String phoneNumber;
 }

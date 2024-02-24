@@ -3,7 +3,7 @@ package com.enigma.enijek.service.impl;
 import com.enigma.enijek.entity.BrandMotorcycles;
 import com.enigma.enijek.model.request.BrandRequest;
 import com.enigma.enijek.model.response.BrandResponse;
-import com.enigma.enijek.model.response.DriverResponse;
+import com.enigma.enijek.model.response.BrandInfoResponse;
 import com.enigma.enijek.reppsitory.BrandRepository;
 import com.enigma.enijek.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class BrandServiceImpl implements BrandService {
                         .brandName(brand.getBrandName())
                         .modelName(brand.getModelName())
                         .driverList(brand.getDrivers()
-                                .stream().map(driver -> DriverResponse.builder()
+                                .stream().map(driver -> BrandInfoResponse.builder()
                                         .id(driver.getId())
                                         .driverName(driver.getDriverName())
                                         .licensePlate(driver.getLicensePlate())

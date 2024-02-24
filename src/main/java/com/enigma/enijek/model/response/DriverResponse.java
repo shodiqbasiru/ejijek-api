@@ -1,6 +1,5 @@
 package com.enigma.enijek.model.response;
 
-import com.enigma.enijek.entity.BrandMotorcycles;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +14,5 @@ public class DriverResponse {
     private String driverName;
     private String licensePlate;
     private String phoneNumber;
-    private BrandResponse motorcycles;
+    private DriverInfoResponse motorcycles;
 }
