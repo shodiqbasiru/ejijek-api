@@ -14,5 +14,5 @@ public class DriverRequest {
     private String driverName;
     private String licensePlate;
     private String phoneNumber;
-    private BrandMotorcycles motorcycles;
+    private Integer motorcycleId;
 }

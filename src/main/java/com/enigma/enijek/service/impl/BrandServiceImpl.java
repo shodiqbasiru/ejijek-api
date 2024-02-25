@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,6 +23,24 @@ public class BrandServiceImpl implements BrandService {
     @Autowired
     public BrandServiceImpl(BrandRepository brandRepository) {
         this.brandRepository = brandRepository;
+    }
+
+    private Stream<BrandInfoResponse> getInfoDriver(BrandMotorcycles response) {
+        return response.getDrivers().stream()
+                .map(driver -> BrandInfoResponse.builder()
+                        .id(driver.getId())
+                        .driverName(driver.getDriverName())
+                        .licensePlate(driver.getLicensePlate())
+                        .phoneNumber(driver.getPhoneNumber())
+                        .build());
+    }
+
+    private Function<BrandMotorcycles, BrandResponse> getBrands() {
+        return brand -> BrandResponse.builder()
+                .id(brand.getId())
+                .brandName(brand.getBrandName())
+                .modelName(brand.getModelName())
+                .build();
     }
 
     @Override
@@ -45,16 +64,6 @@ public class BrandServiceImpl implements BrandService {
                 .build();
     }
 
-    private Stream<BrandInfoResponse> getInfoDriver(BrandMotorcycles response) {
-        return response.getDrivers().stream()
-                .map(driver -> BrandInfoResponse.builder()
-                        .id(driver.getId())
-                        .driverName(driver.getDriverName())
-                        .licensePlate(driver.getLicensePlate())
-                        .phoneNumber(driver.getPhoneNumber())
-                        .build());
-    }
-
     @Override
     public List<BrandResponse> getAllBrands() {
         List<BrandMotorcycles> response = brandRepository.findAll();
@@ -65,6 +74,22 @@ public class BrandServiceImpl implements BrandService {
                         .modelName(brand.getModelName())
                         .driverList(getInfoDriver(brand).collect(Collectors.toList()))
                         .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandResponse> getBrandByNameOrModel(String brandName, String modelName) {
+        List<BrandMotorcycles> listBrand = brandRepository.findByBrandNameAndModelName(brandName, modelName);
+        return listBrand.stream()
+                .map(getBrands())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandResponse> getAllByBrandName(String brandName) {
+        List<BrandMotorcycles> listBrand = brandRepository.findAllByBrandName(brandName);
+        return listBrand.stream()
+                .map(getBrands())
                 .collect(Collectors.toList());
     }
 

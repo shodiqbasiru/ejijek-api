@@ -5,6 +5,7 @@ import com.enigma.enijek.entity.Driver;
 import com.enigma.enijek.model.request.DriverRequest;
 import com.enigma.enijek.model.response.DriverInfoResponse;
 import com.enigma.enijek.model.response.DriverResponse;
+import com.enigma.enijek.reppsitory.BrandRepository;
 import com.enigma.enijek.reppsitory.DriverRepository;
 import com.enigma.enijek.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +18,29 @@ import java.util.stream.Collectors;
 @Service
 public class DriverServiceImpl implements DriverService {
     private final DriverRepository driverRepository;
+    private final BrandRepository brandRepository;
 
     @Autowired
-    public DriverServiceImpl(DriverRepository driverRepository) {
+    public DriverServiceImpl(DriverRepository driverRepository, BrandRepository brandRepository) {
         this.driverRepository = driverRepository;
+        this.brandRepository = brandRepository;
     }
 
     @Override
     @Transactional
     public void create(DriverRequest request) {
         Driver driver = new Driver();
+        getReqDriver(request, driver);
+    }
+
+    private void getReqDriver(DriverRequest request, Driver driver) {
         driver.setDriverName(request.getDriverName());
         driver.setLicensePlate(request.getLicensePlate());
         driver.setPhoneNumber(request.getPhoneNumber());
-        driver.setBrandMotorcycles(request.getMotorcycles());
+
+        BrandMotorcycles brand = brandRepository.findById(String.valueOf(request.getMotorcycleId())).orElseThrow(() -> new RuntimeException("Id Not Found"));
+
+        driver.setBrandMotorcycles(brand);
         driverRepository.save(driver);
     }
 
@@ -79,13 +89,7 @@ public class DriverServiceImpl implements DriverService {
     @Transactional
     public void update(DriverRequest request, String driverId) {
         Driver driver = driverRepository.findById(driverId).orElseThrow(()-> new RuntimeException("Id Not Found"));
-
-        driver.setDriverName(request.getDriverName());
-        driver.setLicensePlate(request.getLicensePlate());
-        driver.setPhoneNumber(request.getPhoneNumber());
-        driver.setBrandMotorcycles(request.getMotorcycles());
-
-        driverRepository.save(driver);
+        getReqDriver(request, driver);
     }
 
     @Override

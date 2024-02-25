@@ -9,6 +9,8 @@ public interface BrandService {
     void create(BrandRequest request);
     BrandResponse get(String brandId);
     List<BrandResponse> getAllBrands();
+    List<BrandResponse> getBrandByNameOrModel(String brandName, String modelName);
+    List<BrandResponse> getAllByBrandName(String brandName);
     void update(BrandRequest request , String brandId);
     void delete(String brandId);
 }

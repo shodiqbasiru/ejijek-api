@@ -21,14 +21,13 @@ public class OrderDetail {
     private String entryPoint;
     @Column(name = "end_point", nullable = false)
     private String endPoint;
+    @Column(name = "distance", nullable = false)
+    private Integer distance;
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
     private Order order;
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "driver_id", referencedColumnName = "id", nullable = false)
     private Driver driver;
-    @ManyToOne(cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "distance_id", referencedColumnName = "id", nullable = false)
-    private Distance distance;
 
 }

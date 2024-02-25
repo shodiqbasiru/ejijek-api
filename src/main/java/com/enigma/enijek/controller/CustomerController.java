@@ -1,5 +1,6 @@
 package com.enigma.enijek.controller;
 
+import com.enigma.enijek.entity.Customer;
 import com.enigma.enijek.model.request.CustomerRequest;
 import com.enigma.enijek.model.response.CustomerResponse;
 import com.enigma.enijek.model.response.WebResponse;
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.HTML;
 import java.util.List;
 
 @RestController
@@ -53,6 +55,23 @@ public class CustomerController {
         WebResponse<List<CustomerResponse>> webResponse = WebResponse.<List<CustomerResponse>>builder().data(customerResponses).build();
         return ResponseEntity.status(HttpStatus.OK).body(webResponse);
     }
+
+    // get by name
+    @GetMapping(
+            path = RouteApi.GET_CUSTOMERS,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            params = "name"
+    )
+    public ResponseEntity<WebResponse<List<CustomerResponse>>> findByName(@RequestParam String name){
+        List<CustomerResponse> customerName = customerService.findByName(name);
+        if (customerName.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(
+                WebResponse.<List<CustomerResponse>>builder().data(customerName).build()
+        );
+    }
+
 
     // update data
     @PutMapping(

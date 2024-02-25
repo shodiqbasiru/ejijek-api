@@ -23,4 +23,7 @@ public class RouteApi {
     public static final String PUT_BRAND = "/api/brands/{brandId}";
     public static final String DELETE_BRAND = "/api/brands/{brandId}";
 
+    // route transaction
+    public static final String POST_TRANSACTION = "/api/transaction/";
+    public static final String GET_TRANSACTION ="/api/transactions";
 }

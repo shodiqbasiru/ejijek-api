@@ -1,7 +1,6 @@
 package com.enigma.enijek.controller;
 
 import com.enigma.enijek.model.request.BrandRequest;
-import com.enigma.enijek.model.request.DriverRequest;
 import com.enigma.enijek.model.response.BrandResponse;
 import com.enigma.enijek.model.response.WebResponse;
 import com.enigma.enijek.routes.RouteApi;
@@ -59,6 +58,36 @@ public class BrandController {
         List<BrandResponse> brandResponses = brandService.getAllBrands();
         return new ResponseEntity<>(
                 WebResponse.<List<BrandResponse>>builder().data(brandResponses).build(),
+                HttpStatus.OK
+        );
+    }
+
+    // get brand by brandName and modelName
+    @GetMapping(
+            path = RouteApi.GET_BRANDS,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            params = {"brand","model"}
+    )
+    public ResponseEntity<WebResponse<List<BrandResponse>>> getBrandByNameAndModel(@RequestParam String brand, @RequestParam String model){
+        List<BrandResponse> responseList = brandService.getBrandByNameOrModel(brand, model);
+        return new ResponseEntity<>(
+                WebResponse.<List<BrandResponse>>builder().data(responseList).build(),
+                HttpStatus.OK
+        );
+    }
+
+    //get brand by brandName
+    @GetMapping(
+            path = RouteApi.GET_BRANDS,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            params = "brand"
+    )
+    public ResponseEntity<WebResponse<List<BrandResponse>>> getByBrandName(@RequestParam String brand){
+        List<BrandResponse> responseList = brandService.getAllByBrandName(brand);
+        return new ResponseEntity<>(
+                WebResponse.<List<BrandResponse>>builder()
+                        .data(responseList)
+                        .build(),
                 HttpStatus.OK
         );
     }

@@ -29,7 +29,7 @@ public class Driver {
     @Column(name = "phone_number",nullable = false,unique = true)
     private String phoneNumber;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id", referencedColumnName = "id",nullable = false)
     private BrandMotorcycles brandMotorcycles;
 

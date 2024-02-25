@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WebResponse<T> {
-    private String message;
-    private T data;
-    private String errors;
-
+public class OrderDetailResponse {
+    private Integer id;
+    private Integer driverId;
+    private String entryPoint;
+    private String endPoint;
+    private Integer distance;
 }

@@ -58,6 +58,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public List<CustomerResponse> findByName(String name) {
+        List<Customer> listName = customerRepository.findByName(name);
+        return listName.stream()
+                .map(customer -> CustomerResponse.builder()
+                        .id(customer.getId())
+                        .customerName(customer.getCustomerName())
+                        .phoneNumber(customer.getPhoneNumber())
+                        .address(customer.getPhoneNumber())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     @Transactional
     public void update(CustomerRequest request , String customerId){
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Id Not Found"));
