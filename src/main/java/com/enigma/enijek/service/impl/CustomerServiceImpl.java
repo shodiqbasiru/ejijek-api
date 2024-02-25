@@ -23,19 +23,19 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public void create(CustomerRequest request){
+    public Customer create(CustomerRequest request){
         Customer customer = new Customer();
         customer.setCustomerName(request.getCustomerName());
         customer.setPhoneNumber(request.getPhoneNumber());
         customer.setAddress(request.getAddress());
 
-        customerRepository.save(customer);
+        return customerRepository.save(customer);
     }
 
     @Override
     public CustomerResponse get(String customerId) {
         Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new RuntimeException(" Id not found"));
         return CustomerResponse.builder()
                 .id(customer.getId())
                 .customerName(customer.getCustomerName())
@@ -72,20 +72,20 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public void update(CustomerRequest request , String customerId){
-        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Id Not Found"));
-
+    public Customer update(CustomerRequest request , String customerId){
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException(" Id Not Found"));
         customer.setCustomerName(request.getCustomerName());
         customer.setPhoneNumber(request.getPhoneNumber());
         customer.setAddress(request.getAddress());
 
-        customerRepository.save(customer);
+        return customerRepository.save(customer);
     }
 
     @Override
     @Transactional
-    public void delete(String customerId){
-        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Id Not Found"));
+    public Customer delete(String customerId){
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException(" Id Not Found"));
         customerRepository.delete(customer);
+        return customer;
     }
 }

@@ -3,7 +3,7 @@ package com.enigma.enijek.controller;
 import com.enigma.enijek.entity.Driver;
 import com.enigma.enijek.model.request.DriverRequest;
 import com.enigma.enijek.model.response.DriverResponse;
-import com.enigma.enijek.model.response.WebResponse;
+import com.enigma.enijek.model.response.ResponseHandler;
 import com.enigma.enijek.routes.RouteApi;
 import com.enigma.enijek.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class DriverController {
@@ -30,12 +29,21 @@ public class DriverController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WebResponse<String>> create(@RequestBody DriverRequest request) {
-        driverService.create(request);
-        return new ResponseEntity<>(
-                WebResponse.<String>builder().data("New Driver Added Successfully").build(),
-                HttpStatus.CREATED
-        );
+    public ResponseEntity<Object> create(@RequestBody DriverRequest request) {
+        try {
+            Driver result = driverService.create(request);
+            return ResponseHandler.generateResponse(
+                    "New Customer Added Successfully",
+                    HttpStatus.CREATED,
+                    result
+            );
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
     // find by id
@@ -43,12 +51,21 @@ public class DriverController {
             path = RouteApi.GET_DRIVER,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WebResponse<DriverResponse>> get(@PathVariable String driverId) {
-        DriverResponse response = driverService.get(driverId);
-        return new ResponseEntity<>(
-                WebResponse.<DriverResponse>builder().data(response).build(),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Object> get(@PathVariable String driverId) {
+        try {
+            DriverResponse result = driverService.get(driverId);
+            return ResponseHandler.generateResponse(
+                    "Success",
+                    HttpStatus.OK,
+                    result
+            );
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
     @GetMapping(
@@ -56,14 +73,21 @@ public class DriverController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             params = "name"
     )
-    public ResponseEntity<WebResponse<List<DriverResponse>>> findByDriverName(@RequestParam String name){
-        List<DriverResponse> driverResponses = driverService.getAllDriverByName(name);
-        return new ResponseEntity<>(
-                WebResponse.<List<DriverResponse>>builder()
-                        .data(driverResponses)
-                        .build(),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Object> findByDriverName(@RequestParam String name) {
+        try {
+            List<DriverResponse> result = driverService.getAllDriverByName(name);
+            return ResponseHandler.generateResponse(
+                    "Success",
+                    HttpStatus.OK,
+                    result
+            );
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
     // get All data
@@ -71,12 +95,21 @@ public class DriverController {
             path = RouteApi.GET_DRIVERS,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WebResponse<List<DriverResponse>>> getAllDrivers() {
-        List<DriverResponse> driverResponse = driverService.getAllDrivers();
-        return new ResponseEntity<>(
-                WebResponse.<List<DriverResponse>>builder().data(driverResponse).build()
-                , HttpStatus.OK
-        );
+    public ResponseEntity<Object> getAllDrivers() {
+        try {
+            List<DriverResponse> result = driverService.getAllDrivers();
+            return ResponseHandler.generateResponse(
+                    "Success",
+                    HttpStatus.OK,
+                    result
+            );
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
     // update data
@@ -85,24 +118,42 @@ public class DriverController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WebResponse<String>> update(@RequestBody DriverRequest request, @PathVariable String driverId) {
-        driverService.update(request, driverId);
-        return new ResponseEntity<>(
-                WebResponse.<String>builder().data("Updated Data Successfully").build(),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Object> update(@RequestBody DriverRequest request, @PathVariable String driverId) {
+        try {
+            Driver result = driverService.update(request, driverId);
+            return ResponseHandler.generateResponse(
+                    "Updated Data Successfully",
+                    HttpStatus.OK,
+                    result
+            );
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
     // delete
     @DeleteMapping(
             path = RouteApi.DELETE_DRIVER
     )
-    public ResponseEntity<WebResponse<String>> delete(@PathVariable String driverId) {
-        driverService.delete(driverId);
-        return new ResponseEntity<>(
-                WebResponse.<String>builder().data("Deleted Data Successfully").build(),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Object> delete(@PathVariable String driverId) {
+        try {
+            Driver result = driverService.delete(driverId);
+            return ResponseHandler.generateResponse(
+                    "Deleted Data Successfully",
+                    HttpStatus.OK,
+                    result
+            );
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
 
     }
 }

@@ -1,8 +1,9 @@
 package com.enigma.enijek.controller;
 
+import com.enigma.enijek.entity.Order;
 import com.enigma.enijek.model.request.OrderRequest;
 import com.enigma.enijek.model.response.OrderInfoResponse;
-import com.enigma.enijek.model.response.WebResponse;
+import com.enigma.enijek.model.response.ResponseHandler;
 import com.enigma.enijek.routes.RouteApi;
 import com.enigma.enijek.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,21 @@ public class TransactionController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WebResponse<String>> create(@RequestBody OrderRequest request) {
-        transactionService.create(request);
-        return new ResponseEntity<>(
-                WebResponse.<String>builder().data("New Transaction Added Successfully").build(),
-                HttpStatus.CREATED
-        );
+    public ResponseEntity<Object> create(@RequestBody OrderRequest request) {
+        try {
+            Order result = transactionService.create(request);
+            return ResponseHandler.generateResponse(
+                    "New Transaction Added Successfully",
+                    HttpStatus.CREATED,
+                    result
+            );
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
     // get all transaction
@@ -42,14 +52,22 @@ public class TransactionController {
             path = RouteApi.GET_TRANSACTION,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WebResponse<List<OrderInfoResponse>>> getAllTransactions() {
-        List<OrderInfoResponse> responseList = transactionService.getAllTransactions();
-        return new ResponseEntity<>(
-                WebResponse.<List<OrderInfoResponse>>builder()
-                        .data(responseList)
-                        .build(),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Object> getAllTransactions() {
+        try {
+            List<OrderInfoResponse> result = transactionService.getAllTransactions();
+            return ResponseHandler.generateResponse(
+                    "Success",
+                    HttpStatus.CREATED,
+                    result
+            );
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
+
     }
 
     // pagination
@@ -58,9 +76,21 @@ public class TransactionController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             params = {"page", "size"}
     )
-    public List<OrderInfoResponse> getOrder(@RequestParam Integer page, @RequestParam Integer size) {
-        Page<OrderInfoResponse> orderPage = transactionService.getAllTransactionsWithPagination(page, size, null);
-        return orderPage.getContent();
+    public ResponseEntity<Object> getOrder(@RequestParam Integer page, @RequestParam Integer size) {
+        try {
+            Page<OrderInfoResponse> result = transactionService.getAllTransactionsWithPagination(page, size, null);
+            return ResponseHandler.generateResponse(
+                    "Success",
+                    HttpStatus.CREATED,
+                    result
+            );
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
     @GetMapping(
@@ -68,8 +98,20 @@ public class TransactionController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             params = {"page", "size", "sort"}
     )
-    public List<OrderInfoResponse> getOrder(@RequestParam Integer page, @RequestParam Integer size, @RequestParam String sort) {
-        Page<OrderInfoResponse> orderPage = transactionService.getAllTransactionsWithPagination(page, size, sort);
-        return orderPage.getContent();
+    public ResponseEntity<Object> getOrder(@RequestParam Integer page, @RequestParam Integer size, @RequestParam String sort) {
+        try {
+            Page<OrderInfoResponse> result = transactionService.getAllTransactionsWithPagination(page, size, sort);
+            return ResponseHandler.generateResponse(
+                    "Success",
+                    HttpStatus.CREATED,
+                    result
+            );
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 }

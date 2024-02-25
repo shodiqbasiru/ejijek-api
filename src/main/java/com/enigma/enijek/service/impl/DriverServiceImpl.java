@@ -26,12 +26,6 @@ public class DriverServiceImpl implements DriverService {
         this.brandRepository = brandRepository;
     }
 
-    @Override
-    @Transactional
-    public void create(DriverRequest request) {
-        Driver driver = new Driver();
-        getReqDriver(request, driver);
-    }
 
     private void getReqDriver(DriverRequest request, Driver driver) {
         driver.setDriverName(request.getDriverName());
@@ -42,6 +36,15 @@ public class DriverServiceImpl implements DriverService {
 
         driver.setBrandMotorcycles(brand);
         driverRepository.save(driver);
+    }
+
+
+    @Override
+    @Transactional
+    public Driver create(DriverRequest request) {
+        Driver driver = new Driver();
+        getReqDriver(request, driver);
+        return driver;
     }
 
     @Override
@@ -101,15 +104,17 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional
-    public void update(DriverRequest request, String driverId) {
+    public Driver update(DriverRequest request, String driverId) {
         Driver driver = driverRepository.findById(driverId).orElseThrow(()-> new RuntimeException("Id Not Found"));
         getReqDriver(request, driver);
+        return driver;
     }
 
     @Override
     @Transactional
-    public void delete(String driverId) {
+    public Driver delete(String driverId) {
         Driver driver = driverRepository.findById(driverId).orElseThrow(() -> new RuntimeException("Id Not Found"));
         driverRepository.delete(driver);
+        return driver;
     }
 }

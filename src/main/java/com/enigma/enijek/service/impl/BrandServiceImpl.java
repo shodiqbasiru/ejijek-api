@@ -97,7 +97,6 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     public BrandMotorcycles update(BrandRequest request, String brandId) {
         BrandMotorcycles brandMotorcycles = brandRepository.findById(brandId).orElseThrow(() ->new RuntimeException(HttpStatus.UNAUTHORIZED+" ID Not Found"));
-
         brandMotorcycles.setBrandName(request.getBrandName());
         brandMotorcycles.setModelName(request.getModelName());
 

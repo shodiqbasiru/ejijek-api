@@ -43,7 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public void create(OrderRequest request) {
+    public Order create(OrderRequest request) {
 
         Order order = new Order();
         order.setDate(request.getDate());
@@ -67,7 +67,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         order.setOrderDetailEntityList(orderDetails);
-        orderRepository.save(order);
+        return orderRepository.save(order);
     }
 
     @Override
