@@ -45,12 +45,12 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     @Transactional
-    public void create(BrandRequest request) {
+    public BrandMotorcycles create(BrandRequest request) {
         BrandMotorcycles brandMotorcycles = new BrandMotorcycles();
         brandMotorcycles.setBrandName(request.getBrandName());
         brandMotorcycles.setModelName(request.getModelName());
 
-        brandRepository.save(brandMotorcycles);
+        return brandRepository.save(brandMotorcycles);
     }
 
     @Override
@@ -95,21 +95,22 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     @Transactional
-    public void update(BrandRequest request, String brandId) {
+    public BrandMotorcycles update(BrandRequest request, String brandId) {
         BrandMotorcycles brandMotorcycles = brandRepository.findById(brandId).orElseThrow(() ->new RuntimeException(HttpStatus.UNAUTHORIZED+" ID Not Found"));
 
         brandMotorcycles.setBrandName(request.getBrandName());
         brandMotorcycles.setModelName(request.getModelName());
 
-        brandRepository.save(brandMotorcycles);
+        return brandRepository.save(brandMotorcycles);
     }
 
     @Override
     @Transactional
-    public void delete(String brandId) {
+    public BrandMotorcycles delete(String brandId) {
         BrandMotorcycles brandMotorcycles = brandRepository.findById(brandId).orElseThrow(() -> new RuntimeException(HttpStatus.UNAUTHORIZED + " Id Not Found"));
         brandRepository.delete(brandMotorcycles);
-    }
 
+        return brandMotorcycles;
+    }
 
 }

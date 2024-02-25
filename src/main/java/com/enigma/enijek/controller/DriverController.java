@@ -1,5 +1,6 @@
 package com.enigma.enijek.controller;
 
+import com.enigma.enijek.entity.Driver;
 import com.enigma.enijek.model.request.DriverRequest;
 import com.enigma.enijek.model.response.DriverResponse;
 import com.enigma.enijek.model.response.WebResponse;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class DriverController {
@@ -45,6 +47,21 @@ public class DriverController {
         DriverResponse response = driverService.get(driverId);
         return new ResponseEntity<>(
                 WebResponse.<DriverResponse>builder().data(response).build(),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping(
+            path = RouteApi.GET_DRIVERS,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            params = "name"
+    )
+    public ResponseEntity<WebResponse<List<DriverResponse>>> findByDriverName(@RequestParam String name){
+        List<DriverResponse> driverResponses = driverService.getAllDriverByName(name);
+        return new ResponseEntity<>(
+                WebResponse.<List<DriverResponse>>builder()
+                        .data(driverResponses)
+                        .build(),
                 HttpStatus.OK
         );
     }

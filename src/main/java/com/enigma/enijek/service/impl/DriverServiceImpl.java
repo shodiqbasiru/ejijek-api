@@ -74,6 +74,20 @@ public class DriverServiceImpl implements DriverService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<DriverResponse> getAllDriverByName(String driverName) {
+        List<Driver> responseList = driverRepository.findByDriverName(driverName);
+        return responseList.stream()
+                .map(driver -> DriverResponse.builder()
+                        .id(driver.getId())
+                        .driverName(driver.getDriverName())
+                        .licensePlate(driver.getLicensePlate())
+                        .phoneNumber(driver.getPhoneNumber())
+                        .motorcycles(mapBrandMotorcycles(driver.getBrandMotorcycles()))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
     private DriverInfoResponse mapBrandMotorcycles(BrandMotorcycles brandMotorcycles) {
         if (brandMotorcycles == null) {
             return null;

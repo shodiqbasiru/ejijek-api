@@ -1,8 +1,9 @@
 package com.enigma.enijek.controller;
 
+import com.enigma.enijek.entity.BrandMotorcycles;
 import com.enigma.enijek.model.request.BrandRequest;
 import com.enigma.enijek.model.response.BrandResponse;
-import com.enigma.enijek.model.response.WebResponse;
+import com.enigma.enijek.model.response.ResponseHandler;
 import com.enigma.enijek.routes.RouteApi;
 import com.enigma.enijek.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,21 @@ public class BrandController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WebResponse<String>> create(@RequestBody BrandRequest request){
-        brandService.create(request);
-        return new ResponseEntity<>(
-                WebResponse.<String>builder().data("New Brand Added Successfully").build(),
-                HttpStatus.CREATED
-        );
+    public ResponseEntity<Object> create(@RequestBody BrandRequest request){
+        try{
+            BrandMotorcycles result = brandService.create(request);
+            return ResponseHandler.generateResponse(
+                    "New Brand Added Successfully",
+                    HttpStatus.CREATED,
+                    result
+            );
+        }catch (Exception e){
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
     // findById
@@ -41,12 +51,21 @@ public class BrandController {
             path = RouteApi.GET_BRAND,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WebResponse<BrandResponse>> get(@PathVariable String brandId){
-        BrandResponse response = brandService.get(brandId);
-        return new ResponseEntity<>(
-                WebResponse.<BrandResponse>builder().data(response).build(),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Object> get(@PathVariable String brandId){
+        try{
+            BrandResponse response = brandService.get(brandId);
+            return ResponseHandler.generateResponse(
+                    "Get Data By Id Successfully",
+                    HttpStatus.OK,
+                    response
+            );
+        }catch (Exception e){
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
     // get All data
@@ -54,12 +73,21 @@ public class BrandController {
             path = RouteApi.GET_BRANDS,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WebResponse<List<BrandResponse>>> getAllBrands(){
-        List<BrandResponse> brandResponses = brandService.getAllBrands();
-        return new ResponseEntity<>(
-                WebResponse.<List<BrandResponse>>builder().data(brandResponses).build(),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Object> getAllBrands(){
+        try{
+            List<BrandResponse> response= brandService.getAllBrands();
+            return ResponseHandler.generateResponse(
+                    "Get All Data Successfully",
+                    HttpStatus.OK,
+                    response
+            );
+        }catch (Exception e){
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
     // get brand by brandName and modelName
@@ -68,12 +96,21 @@ public class BrandController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             params = {"brand","model"}
     )
-    public ResponseEntity<WebResponse<List<BrandResponse>>> getBrandByNameAndModel(@RequestParam String brand, @RequestParam String model){
-        List<BrandResponse> responseList = brandService.getBrandByNameOrModel(brand, model);
-        return new ResponseEntity<>(
-                WebResponse.<List<BrandResponse>>builder().data(responseList).build(),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Object> getBrandByNameAndModel(@RequestParam String brand, @RequestParam String model){
+        try {
+            List<BrandResponse> response = brandService.getBrandByNameOrModel(brand, model);
+            return ResponseHandler.generateResponse(
+                    "Success",
+                    HttpStatus.OK,
+                    response
+            );
+        }catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
     //get brand by brandName
@@ -82,14 +119,21 @@ public class BrandController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             params = "brand"
     )
-    public ResponseEntity<WebResponse<List<BrandResponse>>> getByBrandName(@RequestParam String brand){
-        List<BrandResponse> responseList = brandService.getAllByBrandName(brand);
-        return new ResponseEntity<>(
-                WebResponse.<List<BrandResponse>>builder()
-                        .data(responseList)
-                        .build(),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Object> getByBrandName(@RequestParam String brand){
+       try {
+           List<BrandResponse> response = brandService.getAllByBrandName(brand);
+           return ResponseHandler.generateResponse(
+                   "UPDATED",
+                   HttpStatus.OK,
+                   response
+           );
+       }catch (Exception e) {
+           return ResponseHandler.generateResponse(
+                   e.getMessage(),
+                   HttpStatus.MULTI_STATUS,
+                   null
+           );
+       }
     }
 
     // update data
@@ -98,25 +142,42 @@ public class BrandController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WebResponse<String>> update(@RequestBody BrandRequest request, @PathVariable String brandId) {
-        brandService.update(request, brandId);
-        return new ResponseEntity<>(
-                WebResponse.<String>builder().data("Updated Data Successfully").build(),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Object> update(@RequestBody BrandRequest request, @PathVariable String brandId) {
+        try {
+            BrandMotorcycles response = brandService.update(request, brandId);
+            return ResponseHandler.generateResponse(
+                    "DELETED",
+                    HttpStatus.OK,
+                    response
+            );
+        }catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
     // delete
     @DeleteMapping(
             path = RouteApi.DELETE_BRAND
     )
-    public ResponseEntity<WebResponse<String>> delete(@PathVariable String brandId) {
-        brandService.delete(brandId);
-        return new ResponseEntity<>(
-                WebResponse.<String>builder().data("Deleted Data Successfully").build(),
-                HttpStatus.OK
-        );
-
+    public ResponseEntity<Object> delete(@PathVariable String brandId) {
+        try {
+        BrandMotorcycles response = brandService.delete(brandId);
+            return ResponseHandler.generateResponse(
+                    "Success",
+                    HttpStatus.OK,
+                    response
+            );
+        }catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    e.getMessage(),
+                    HttpStatus.MULTI_STATUS,
+                    null
+            );
+        }
     }
 
 }
