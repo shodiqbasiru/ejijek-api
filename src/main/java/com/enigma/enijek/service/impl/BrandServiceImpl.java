@@ -4,7 +4,7 @@ import com.enigma.enijek.entity.BrandMotorcycles;
 import com.enigma.enijek.model.request.BrandRequest;
 import com.enigma.enijek.model.response.BrandResponse;
 import com.enigma.enijek.model.response.BrandInfoResponse;
-import com.enigma.enijek.reppsitory.BrandRepository;
+import com.enigma.enijek.repository.BrandRepository;
 import com.enigma.enijek.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

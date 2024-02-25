@@ -8,12 +8,16 @@ import com.enigma.enijek.model.request.OrderDetailRequest;
 import com.enigma.enijek.model.request.OrderRequest;
 import com.enigma.enijek.model.response.OrderDetailResponse;
 import com.enigma.enijek.model.response.OrderInfoResponse;
-import com.enigma.enijek.reppsitory.CustomerRepository;
-import com.enigma.enijek.reppsitory.DriverRepository;
-import com.enigma.enijek.reppsitory.OrderDetailRepository;
-import com.enigma.enijek.reppsitory.OrderRepository;
+import com.enigma.enijek.repository.CustomerRepository;
+import com.enigma.enijek.repository.DriverRepository;
+import com.enigma.enijek.repository.OrderDetailRepository;
+import com.enigma.enijek.repository.OrderRepository;
 import com.enigma.enijek.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,5 +89,32 @@ public class TransactionServiceImpl implements TransactionService {
                                 .collect(Collectors.toList()))
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<OrderInfoResponse> getAllTransactionsWithPagination(Integer pageNumber, Integer pageSize, String sort) {
+        Pageable pageable = null;
+        if (sort != null) {
+            // with sorting
+            pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.ASC, sort);
+        } else {
+            // without sorting
+            pageable = PageRequest.of(pageNumber, pageSize);
+        }
+        return orderRepository.findAll(pageable)
+                .map(order -> OrderInfoResponse.builder()
+                        .id(order.getId())
+                        .date(order.getDate())
+                        .customerId(order.getCustomer().getId())
+                        .orderDetails(order.getOrderDetailEntityList().stream()
+                                .map(listDetail -> OrderDetailResponse.builder()
+                                        .id(listDetail.getId())
+                                        .driverId(listDetail.getDriver().getId())
+                                        .entryPoint(listDetail.getEntryPoint())
+                                        .endPoint(listDetail.getEndPoint())
+                                        .distance(listDetail.getDistance())
+                                        .build())
+                                .collect(Collectors.toList()))
+                        .build());
     }
 }

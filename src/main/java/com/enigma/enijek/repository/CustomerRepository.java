@@ -1,7 +1,6 @@
-package com.enigma.enijek.reppsitory;
+package com.enigma.enijek.repository;
 
 import com.enigma.enijek.entity.Customer;
-import com.enigma.enijek.model.response.CustomerResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

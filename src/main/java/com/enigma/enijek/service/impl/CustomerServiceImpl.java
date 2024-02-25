@@ -3,7 +3,7 @@ package com.enigma.enijek.service.impl;
 import com.enigma.enijek.entity.Customer;
 import com.enigma.enijek.model.request.CustomerRequest;
 import com.enigma.enijek.model.response.CustomerResponse;
-import com.enigma.enijek.reppsitory.CustomerRepository;
+import com.enigma.enijek.repository.CustomerRepository;
 import com.enigma.enijek.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
